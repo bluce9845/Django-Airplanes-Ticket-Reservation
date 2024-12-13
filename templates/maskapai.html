@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ZcAirlanes</title>
+  </head>
+  <body>
+    {% for dt in dataTujuan %}
+    <ul>
+      <li>{{ dt.lokasiPertama }}</li>
+      <li>{{ dt.lokasiTujuan }}</li>
+      <li>{{ dt.tgl_pergi }}</li>
+      <li>{{ dt.tgl_pulang }}</li>
+    </ul>
+    {% endfor %} {% for mp in maskapai %}
+    <ul>
+      <li>{{ mp.nameMaskapai }}</li>
+      <li>{{ mp.hargaTicket }}</li>
+      <li>{{ mp.jamBerangkat }}</li>
+      <li>{{ mp.jamSampai }}</li>
+    </ul>
+    {% endfor %}
+  </body>
+</html>

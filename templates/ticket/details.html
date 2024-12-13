@@ -1,0 +1,58 @@
+{% extends "base.html" %} {% block title %}{% endblock %} {% block content %}
+<div class="container d-flex" style="margin: 10% 0 0 2%">
+  <div class="description-container">
+    <div class="des-wrap">
+      {% if maskapai %}
+      <div class="card">
+        <div class="card-body">Maskapai yang anda pilih -> {{ maskapai.nameMaskapai }}</div>
+        <div class="card-body">Tanggal Take Off -> {{ maskapai.tgl_takeoff }}</div>
+        <div class="card-body">Jam Keberangkatan -> {{ maskapai.jamBerangkat }}</div>
+        <div class="card-body">Harga Per seat/orang -> {{ maskapai.hargaTicket }}</div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+<form method="POST" action="">
+  {% csrf_token %} 
+  <div class="container-input-group d-flex">
+  <div class="container-seats">
+    <div class="information d-flex">
+      <div class="row" style="max-width: 400px">
+        <div class="col" style="font-size: 0.8rem">
+          <div class="wrap-st d-flex">
+            <div class="not_booked"></div>
+            <p class="ms-2">This seat not booked</p>
+          </div>
+
+          <div class="wrap-st d-flex">
+            <div class="is_booked"></div>
+            <p class="ms-2">This seat is booked</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="seats-wrap">
+      <div class="seat-grid">
+        {% for seat in seats %}
+        <div class="seat {% if seat.is_booked %}booked{% else %}available{% endif %}" onclick="selectSeat('{{ seat.id }}', '{{ seat.seat_number }}')" data-seat-id="{{ seat.id }}" data-seat-number="{{ seat.seat_number }}">
+          <span>{{ seat.seat_number }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+    <div class="container_wrap ms-5" style="max-width: 300px">
+      {{ form.as_p }}
+
+      <!-- Hidden input untuk menyimpan ID seat yang dipilih -->
+      <input type="hidden" id="selected-seat-id" name="seat_id" value="" />
+      <input type="hidden" id="selected-seat-number" name="seat_number" value="" />
+
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </div>
+  </div>
+</form>
+{% endblock %}
