@@ -10,6 +10,7 @@ class Maskapai(models.Model):
     bandaraTujuan = models.CharField(max_length=200, null=True)
     jamBerangkat = models.TimeField(null=True)
     jamSampai = models.TimeField(null=True)
+    clas = models.CharField(max_length=200, null=True)
 
     def __str__(self):
         return f"{self.nameMaskapai} ({self.lokasiPertama} -> {self.lokasiTujuan}) ({self.bandaraPertama} -> {self.bandaraTujuan})"
@@ -27,6 +28,7 @@ class TicketReservation(models.Model):
     seat = models.ForeignKey('Seats', on_delete=models.CASCADE)
     namaLengkap = models.CharField(max_length=200)
     nik = models.CharField(max_length=16)
+    jumlahTicket = models.CharField(max_length=20, null=True)
     waktuPembelian = models.TimeField()
 
     def __str__(self):

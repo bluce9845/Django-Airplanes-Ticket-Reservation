@@ -18,6 +18,7 @@
           <h6 class="card-subtitle mb-2 text-body-secondary">{{ maskapai.hargaTicket }}</h6>
           <p class="card-text">{{ maskapai.lokasiPertama }} To {{ maskapai.lokasiTujuan }}</p>
           <p class="card-text">Tanggal keberangkatan {{ maskapai.tgl_takeoff }}</p>
+          <p class="card-text">Class -> {{ maskapai.clas }}</p>
           <p class="card-text">{{ maskapai.jamBerangkat }} -> {{ maskapai.jamSampai }}</p>
           <a href="{% url 'ticketDetails' maskapai.id %}" class="card-link">Buy</a>
         </div>

@@ -11,24 +11,27 @@ def home(request):
         searched1 = request.POST['searched-1']
         searched2 = request.POST['searched-2']
         searched3 = request.POST['searched-3']
+        searched4 = request.POST['searched-4']
 
-        searched = Maskapai.objects.filter(lokasiPertama__icontains=searched1, lokasiTujuan__icontains=searched2, tgl_takeoff__icontains=searched3)
+        searched = Maskapai.objects.filter(lokasiPertama__icontains=searched1, lokasiTujuan__icontains=searched2, tgl_takeoff__icontains=searched3, clas__icontains=searched4)
    
 
         context = {
             'searched1': searched1,
             'searched2': searched2,
             'searched3': searched3,
+            'searched4': searched4,
             'searched' : searched,
         }
         
-        if not searched1 and searched2 and searched3:
+        if not searched1 and searched2 and searched3 and searched4:
             messages.success(request, "That days not cant fly try for more days...")
             return render(request, 'home.html', context)
         else:
             request.session['searched1'] = searched1
             request.session['searched2'] = searched2
             request.session['searched3'] = searched3
+            request.session['searched4'] = searched4
             return render(request, 'maskapai/search.html', context)
     else:
         return render(request, 'home.html',{})

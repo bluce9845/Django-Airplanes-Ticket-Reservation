@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Maskapai, Seats
+from .models import Maskapai, Seats, TicketReservation
 
 @admin.register(Maskapai)
 class FlightAdmin(admin.ModelAdmin):
@@ -22,5 +22,5 @@ class FlightAdmin(admin.ModelAdmin):
             self.message_user(request, f"Generated {len(seats)} seats for flight {flight.nameMaskapai}")
     generate_seats.short_description = "Generate seats for selected flights"
 
-# admin.site.register(DataPenumpang)
+admin.site.register(TicketReservation)
 admin.site.register(Seats)
