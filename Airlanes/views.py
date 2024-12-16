@@ -47,6 +47,8 @@ def home(request):
             'form': searchForm
         }
 
+        # request.session.clear()
+
         return render(request, 'home.html', form)
 
 def maskapai(request):
@@ -70,36 +72,49 @@ def ticketDetails(request, ticket_id):
 
     if request.method == "POST":
         seat_id = request.POST.get('seat_id')
+        namaLengkap = request.POST.get('namaLengkap')
+        nik = request.POST.get('nik')
+        waktuPembelian = request.POST.get('waktuPembelian')
         seat_number = request.POST.get('seat_number')
 
         if seat_id:
             try:
                 selected_seat = maskapai.seats.get(id=seat_id)
 
-                request.session['selected_seat_id'] = selected_seat.id
-                request.session['namaLengkap'] = request.POST.get('namaLengkap')
-                request.session['nik'] = request.POST.get('nik')
-                request.session['waktuPembelian'] = request.POST.get('waktuPembelian')
+                request.session['ticket_data'] = {
+                    'seat_id': seat_id,
+                    'namaLengkap': namaLengkap,
+                    'nik': nik,
+                    'waktuPembelian': waktuPembelian,
+                }
+
+                # print(f"Ticket data : {request.POST['ticket_data']}")
                 
                 # Proses penyimpanan data ke model TicketReservation
                 ticket_reservation = TicketReservation(
                     seat=selected_seat,
                     namaLengkap=request.POST.get('namaLengkap'),
                     nik=request.POST.get('nik'),
-                    waktuPembelian=request.POST.get('waktuPembelian'),
-
+                    waktuPembelian=request.POST.get('waktuPembelian')
                 )
                 
                 ticket_reservation.save()
-                
+
                 # Tandai seat sebagai sudah dipesan
                 selected_seat.is_booked = True
                 selected_seat.save()
 
                 messages.success(request, "Seat berhasil dipesan.")
-                return HttpResponseRedirect(reverse('ticketDetails', args=[ticket_id]))
+                return HttpResponseRedirect(reverse('ticket-info', args=[ticket_id]))
             except maskapai.seats.model.DoesNotExist:
                 return HttpResponse("Seat tidak ditemukan", status=404)
+
+
+    keys_to_remove = ['searched1', 'searched2', 'searched3', 'searched4']
+    
+    for key in keys_to_remove:
+        if key in request.session:
+            del request.session[key]
 
     context = {
         'maskapai': maskapai,
@@ -115,31 +130,35 @@ def book_seat(request, ticket_id, seat_id):
         seat = get_object_or_404(Seats, id=seat_id, flight_id=ticket_id)
 
         if not seat.is_booked:
-
-            
             seat.is_booked = True
             seat.save()
 
-            return HttpResponseRedirect(reverse('ticketDetails', args=[ticket_id]))
+            return HttpResponseRedirect(reverse('ticket-info', args=[ticket_id]))
         else:
             messages.error(request, "Seat already booked.")
             return HttpResponseRedirect(reverse('ticketDetails', args=[ticket_id]))
 
 
-def displayTicket(request, ticket_id, reservation_id):
-    data_reservation = TicketReservation.objects.all().filter(id=reservation_id)
+
+def displayTicket(request, ticket_id):
     data_ticket = Maskapai.objects.get(id=ticket_id)
     data = data_ticket.seats.all()
+    ticket_data = request.session.get('ticket_data')
 
-    selected_seat_id = request.session.get('selected_seat_id')
-    namaLengkap = request.session.get('namaLengkap')
-    nik = request.session.get('nik')
-    waktuPembelian = request.session.get('waktuPembelian')
+    if not ticket_data:
+        print("Session items:", request.session.items())
+        return HttpResponse("Data tidak ditemukan di session", status=404)
+
+    # Ambil detail spesifik
+    seat_id = ticket_data.get('seat_id')
+    namaLengkap = ticket_data.get('namaLengkap')
+    nik = ticket_data.get('nik')
+    waktuPembelian = ticket_data.get('waktuPembelian')
 
     context = {
         'data': data_ticket,
-        'seat': selected_seat_id,
-        'name': namaLengkap,
+        'seat_id': seat_id,
+        'namaLengkap': namaLengkap,
         'nik': nik,
         'waktuPembelian': waktuPembelian,
     }

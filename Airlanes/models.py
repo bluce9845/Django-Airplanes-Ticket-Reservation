@@ -23,6 +23,7 @@ class Seats(models.Model):
 
     def __str__(self):
         return f"{self.seat_number} ({'Booked' if self.is_booked else 'Available'})"
+        
 
 class TicketReservation(models.Model):
     seat = models.ForeignKey('Seats', on_delete=models.CASCADE)
