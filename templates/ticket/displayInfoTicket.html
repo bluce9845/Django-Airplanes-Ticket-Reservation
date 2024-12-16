@@ -1,0 +1,21 @@
+{% extends "base.html" %}{% load static %} {% block title %}ZcAirlanes{% endblock %} {% block content %}
+<div class="container">
+  <div class="wrap">
+    <div class="content-container">
+      <ul class="container">
+        <li>Name : {{ name }}</li>
+        <li>Nik : {{nik}}</li>
+        <li>Maskapai : {{ data.nameMaskapai }}</li>
+        <li>tgl berangkat : {{ data.tgl_takeoff }}</li>
+        <li>Class : {{ data.clas }}</li>
+        <li>Seat : {{ seat }}</li>
+        <li>Harga tiket : {{ data.hargaTicket }}</li>
+        <li>Waktu Pembelian : {{ waktuPembelian }}</li>
+      </ul>
+    </div>
+
+    <button class="btn btn-success">Yes</button>
+    <button class="btn btn-danger">Cancel</button>
+  </div>
+</div>
+{% endblock %}

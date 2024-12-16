@@ -75,6 +75,12 @@ def ticketDetails(request, ticket_id):
         if seat_id:
             try:
                 selected_seat = maskapai.seats.get(id=seat_id)
+
+                request.session['selected_seat_id'] = selected_seat.id
+                request.session['namaLengkap'] = request.POST.get('namaLengkap')
+                request.session['nik'] = request.POST.get('nik')
+                request.session['waktuPembelian'] = request.POST.get('waktuPembelian')
+                
                 # Proses penyimpanan data ke model TicketReservation
                 ticket_reservation = TicketReservation(
                     seat=selected_seat,
@@ -83,6 +89,7 @@ def ticketDetails(request, ticket_id):
                     waktuPembelian=request.POST.get('waktuPembelian'),
 
                 )
+                
                 ticket_reservation.save()
                 
                 # Tandai seat sebagai sudah dipesan
@@ -117,3 +124,24 @@ def book_seat(request, ticket_id, seat_id):
         else:
             messages.error(request, "Seat already booked.")
             return HttpResponseRedirect(reverse('ticketDetails', args=[ticket_id]))
+
+
+def displayTicket(request, ticket_id, reservation_id):
+    data_reservation = TicketReservation.objects.all().filter(id=reservation_id)
+    data_ticket = Maskapai.objects.get(id=ticket_id)
+    data = data_ticket.seats.all()
+
+    selected_seat_id = request.session.get('selected_seat_id')
+    namaLengkap = request.session.get('namaLengkap')
+    nik = request.session.get('nik')
+    waktuPembelian = request.session.get('waktuPembelian')
+
+    context = {
+        'data': data_ticket,
+        'seat': selected_seat_id,
+        'name': namaLengkap,
+        'nik': nik,
+        'waktuPembelian': waktuPembelian,
+    }
+    
+    return render(request, 'ticket/displayInfoTicket.html', context)

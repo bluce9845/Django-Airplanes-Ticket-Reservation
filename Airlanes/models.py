@@ -28,7 +28,6 @@ class TicketReservation(models.Model):
     seat = models.ForeignKey('Seats', on_delete=models.CASCADE)
     namaLengkap = models.CharField(max_length=200)
     nik = models.CharField(max_length=16)
-    jumlahTicket = models.CharField(max_length=20, null=True)
     waktuPembelian = models.TimeField()
 
     def __str__(self):

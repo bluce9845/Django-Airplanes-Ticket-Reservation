@@ -25,7 +25,7 @@ class ReservationForm(forms.Form):
     namaLengkap = forms.CharField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'name':'namaLengkap','placeholder':'Nama Lengkap'}))
     nik = forms.CharField(label="", max_length=16,widget=forms.TextInput(attrs={'class':'form-control', 'name':'nik','placeholder':'Nik'}))
     waktuPembelian = forms.CharField(label="Waktu Pembelian", widget=forms.TimeInput(attrs={'type':'time', 'class':'form-control', 'name':'waktuPembelian','placeholder':'Waktu Pembelian'}))
-    jumlahTicket = forms.CharField(label="", widget=forms.TextInput(attrs={'type':'number', 'class':'form-control', 'name':'jumlahTicket', 'id':'jumlahTicket', 'placeholder':'Jumlah Ticket'}))
+    # jumlahTicket = forms.CharField(label="", widget=forms.TextInput(attrs={'type':'number', 'class':'form-control', 'name':'jumlahTicket', 'id':'jumlahTicket', 'placeholder':'Jumlah Ticket'}))
     
     class Meta:
         model = TicketReservation
