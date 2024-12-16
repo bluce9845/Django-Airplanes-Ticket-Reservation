@@ -1,31 +1,29 @@
-{% extends "base.html" %} {% load static %}
- {% block title %}ZcAirlanes{% endblock %}
-
- {% block content %}
+{% extends "base.html" %} {% load static %} {% block title %}ZcAirlanes{% endblock %} {% block content %}
+<div class="container">
   <header>
-      <nav class="navbar navbar-expand-lg">
-        <div class="container">
-          <a class="navbar-brand" href="#">ZcAirlanes</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Bantuan</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Jadi Mitra</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">For Corporates</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Pesanan</a>
-              </li>
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand" href="#">ZcAirlanes</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Bantuan</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Jadi Mitra</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">For Corporates</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Pesanan</a>
+            </li>
 
             <li class="nav-item">
               {% if user.is_authenticated %}
@@ -33,54 +31,27 @@
                 <button id="login" class="btn bg-white btn-sm rounded-3 pl-1 pr-3 dropdown-toggle mt-1" data-bs-toggle="dropdown">
                   <span class="fw-semibold">{{ user.username }}</span>
                 </button>
-                    <ul class="dropdown-menu mt-2">
-                      <li><a class="dropdown-item text-dark" href="{% url 'Authenticated:logout' %}">Logout</a></li>
-                    </ul>
-                  </div>
+                <ul class="dropdown-menu mt-2">
+                  <li><a class="dropdown-item text-dark" href="{% url 'Authenticated:logout' %}">Logout</a></li>
+                </ul>
+              </div>
               {% else %}
-                <button id="login" class="btn bg-white btn-sm rounded-5 pl-1 pr-3">
-                  <span class="fw-semibold"><a href="{% url 'Authenticated:login' %}" class="login text-decoration-none">Login</a></span>
-                </button>
+              <button id="login" class="btn bg-white btn-sm rounded-5 pl-1 pr-3">
+                <span class="fw-semibold"><a href="{% url 'Authenticated:login' %}" class="login text-decoration-none">Login</a></span>
+              </button>
               {% endif %}
             </li>
-            </ul>
-          </div>
+          </ul>
         </div>
-      </nav>
-    </header>
+      </div>
+    </nav>
+  </header>
 
-    <section class="ms-auto me-auto mt-5" style="max-width: 300px;">
-       <form action="" method="post">
-        {% csrf_token %}
-        <div class="mb-3">
-          <label for="searched-1" class="form-label">Dari</label>
-          <input type="text" class="form-control" id="searched-1" name="searched-1" />
-        </div>
-        <div class="mb-3">
-          <label for="searched-2" class="form-label">Ke</label>
-          <input type="text" class="form-control" id="searched-2" name="searched-2" />
-        </div>
-        <div class="mb-3">
-          <label class="form-label" for="searched-3">Tanggal berangkat</label>
-          <input type="date" class="form-control" id="searched-3" name="searched-3" />
-        </div>
-        {% comment %} <div class="mb-3">
-          <label class="form-label" for="searched-4">Tanggal kembali</label>
-          <input type="date" class="form-control" id="searched-4" name="searched-4" />
-        </div> {% endcomment %}
-        <div class="mb-3">
-          <label class="form-label" for="searched-4">Pilih Class</label>
-          <select name="searched-4" id="searched-4">
-            <option value="economy">Economy</option>
-            <option value="economy_vip">Vip Economy</option>
-            <option value="busines">Busines</option>
-            <option value="frist_class">Frist Class</option>
-          </select>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Search</button>
-      </form>
-    </section>
-    </div>
- {% endblock  %}
- 
+  <section class="ms-auto me-auto mt-5" style="max-width: 300px">
+    <form action="" method="post">
+      {% csrf_token %} {{ form.as_p }}
+      <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+  </section>
+</div>
+{% endblock %}

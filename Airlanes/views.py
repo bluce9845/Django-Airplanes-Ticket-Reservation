@@ -4,37 +4,50 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .models import Maskapai, Seats, TicketReservation
-from .forms import ReservationForm
+from .forms import ReservationForm, SearchTickets
 
 def home(request):
+    searchForm = SearchTickets()
+    
     if request.method == "POST":
-        searched1 = request.POST['searched-1']
-        searched2 = request.POST['searched-2']
-        searched3 = request.POST['searched-3']
-        searched4 = request.POST['searched-4']
+        form = SearchTickets(request.POST)
+        if form.is_valid():   
+            searched1 = form.cleaned_data['lokasiPertama']
+            searched2 = form.cleaned_data['lokasiTujuan']
+            searched3 = form.cleaned_data['tglBerangkat']
+            searched4 = form.cleaned_data['pilihClass']
+    
+            # Debug
+            # print(f"Name : {searched1}")
 
-        searched = Maskapai.objects.filter(lokasiPertama__icontains=searched1, lokasiTujuan__icontains=searched2, tgl_takeoff__icontains=searched3, clas__icontains=searched4)
+            searched = Maskapai.objects.filter(lokasiPertama__icontains=searched1, lokasiTujuan__icontains=searched2, tgl_takeoff__icontains=searched3, clas__icontains=searched4)
    
 
-        context = {
-            'searched1': searched1,
-            'searched2': searched2,
-            'searched3': searched3,
-            'searched4': searched4,
-            'searched' : searched,
-        }
+            context = {
+                'searched1': searched1,
+                'searched2': searched2,
+                'searched3': searched3,
+                'searched4': searched4,
+                'searched' : searched,
+            }
         
-        if not searched1 and searched2 and searched3 and searched4:
-            messages.success(request, "That days not cant fly try for more days...")
-            return render(request, 'home.html', context)
+            if not searched1 and searched2 and searched3 and searched4:
+                messages.success(request, "That days not cant fly try for more days...")
+                return render(request, 'home.html', context)
+            else:
+                request.session['searched1'] = searched1
+                request.session['searched2'] = searched2
+                request.session['searched3'] = searched3
+                request.session['searched4'] = searched4
+                return render(request, 'maskapai/search.html', context)
         else:
-            request.session['searched1'] = searched1
-            request.session['searched2'] = searched2
-            request.session['searched3'] = searched3
-            request.session['searched4'] = searched4
-            return render(request, 'maskapai/search.html', context)
+            form = SearchTickets()
     else:
-        return render(request, 'home.html',{})
+        form = {
+            'form': searchForm
+        }
+
+        return render(request, 'home.html', form)
 
 def maskapai(request):
     maskapai = Maskapai.objects.all()
