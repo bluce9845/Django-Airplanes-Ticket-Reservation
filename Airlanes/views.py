@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 from .models import Maskapai, Seats, TicketReservation
 from .forms import ReservationForm, SearchTickets, TicketConfirmForm
 
@@ -46,6 +47,8 @@ def home(request):
 
         if request.user.is_authenticated:
             username = request.user.username
+        else:
+            username = 'guest'
         
         form = {
             'form': searchForm,
@@ -65,6 +68,7 @@ def maskapai(request):
     return render(request, 'maskapai.html', context)
 
 
+@login_required(login_url='Authenticated:login')
 def ticketDetails(request, ticket_id):
     try:
         maskapai = Maskapai.objects.get(id=ticket_id)
@@ -129,7 +133,7 @@ def ticketDetails(request, ticket_id):
     }
     return render(request, 'ticket/details.html', context)
 
-
+@login_required(login_url='Authenticated:login')
 def book_seat(request, ticket_id, seat_id):
     if request.method == "POST":
         seat = get_object_or_404(Seats, id=seat_id, flight_id=ticket_id)
@@ -144,7 +148,7 @@ def book_seat(request, ticket_id, seat_id):
             return HttpResponseRedirect(reverse('ticketDetails', args=[ticket_id]))
 
 
-
+@login_required(login_url='Authenticated:login')
 def displayTicket(request, ticket_id):
     data_reservation = TicketReservation.objects.all().latest('created_at')
     data_ticket = Maskapai.objects.get(id=ticket_id)

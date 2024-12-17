@@ -32,7 +32,7 @@ def register_user(request):
         if form.is_valid():
             form.save()
             messages.success(request, "You Have Successfully Register...")
-            return redirect('home')
+            return redirect('login')
     else:
         form = SignUpForm()
         return render(request, 'register.html', {'form': form})
