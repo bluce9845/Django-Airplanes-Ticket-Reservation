@@ -30,6 +30,21 @@ class TicketReservation(models.Model):
     namaLengkap = models.CharField(max_length=200)
     nik = models.CharField(max_length=16)
     waktuPembelian = models.TimeField()
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
         return f"{self.namaLengkap} {self.nik}"
+
+
+class UserTicket(models.Model):
+    name_user_ticket = models.CharField(max_length=200)
+    nik_user = models.CharField(max_length=16)
+    maskapaiName = models.CharField(max_length=200)
+    takeoff_date = models.CharField(max_length=200)
+    class_airplane = models.CharField(max_length=200)
+    seat_user = models.CharField(max_length=200)
+    ticketPrice = models.CharField(max_length=200)
+    timeBuyTicket = models.CharField(max_length=200)
+
+    def __str__(self):
+        return f"{self.name_user_ticket} {self.nik_user} {self.maskapaiName} {self.takeoff_date} {self.seat_user}"

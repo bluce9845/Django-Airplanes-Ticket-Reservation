@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django import forms
-from .models import TicketReservation, Maskapai
+from .models import TicketReservation, Maskapai, UserTicket
 
 class SearchTickets(forms.Form):
     OPTIONS = [
@@ -30,3 +30,18 @@ class ReservationForm(forms.Form):
     class Meta:
         model = TicketReservation
         fields = ('namaLengkap', 'nik', 'waktuPembelian', 'seat')
+
+
+class TicketConfirmForm(forms.ModelForm):
+    class Meta:
+        model = UserTicket
+        fields = (
+                    'name_user_ticket',
+                    'nik_user',
+                    'maskapaiName',
+                    'takeoff_date',
+                    'class_airplane',
+                    'seat_user',
+                    'ticketPrice',
+                    'timeBuyTicket'
+                )

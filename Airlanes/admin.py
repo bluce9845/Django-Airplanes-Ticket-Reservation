@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Maskapai, Seats, TicketReservation
+from .models import Maskapai, Seats, TicketReservation, UserTicket
 
 @admin.register(Maskapai)
 class FlightAdmin(admin.ModelAdmin):
@@ -24,3 +24,4 @@ class FlightAdmin(admin.ModelAdmin):
 
 admin.site.register(TicketReservation)
 admin.site.register(Seats)
+admin.site.register(UserTicket)

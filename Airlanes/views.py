@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .models import Maskapai, Seats, TicketReservation
-from .forms import ReservationForm, SearchTickets
+from .forms import ReservationForm, SearchTickets, TicketConfirmForm
 
 def home(request):
     searchForm = SearchTickets()
@@ -43,8 +43,13 @@ def home(request):
         else:
             form = SearchTickets()
     else:
+
+        if request.user.is_authenticated:
+            username = request.user.username
+        
         form = {
-            'form': searchForm
+            'form': searchForm,
+            'username': username
         }
 
         # request.session.clear()
@@ -104,7 +109,7 @@ def ticketDetails(request, ticket_id):
                 selected_seat.is_booked = True
                 selected_seat.save()
 
-                messages.success(request, "Seat berhasil dipesan.")
+                # messages.success(request, "Seat berhasil dipesan.")
                 return HttpResponseRedirect(reverse('ticket-info', args=[ticket_id]))
             except maskapai.seats.model.DoesNotExist:
                 return HttpResponse("Seat tidak ditemukan", status=404)
@@ -141,6 +146,7 @@ def book_seat(request, ticket_id, seat_id):
 
 
 def displayTicket(request, ticket_id):
+    data_reservation = TicketReservation.objects.all().latest('created_at')
     data_ticket = Maskapai.objects.get(id=ticket_id)
     data = data_ticket.seats.all()
     ticket_data = request.session.get('ticket_data')
@@ -155,12 +161,23 @@ def displayTicket(request, ticket_id):
     nik = ticket_data.get('nik')
     waktuPembelian = ticket_data.get('waktuPembelian')
 
+    if request.method == 'POST':
+        form = TicketConfirmForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Success buy ticket, please check your profile to check your ticket!!")
+            return redirect('home')
+        else:
+            form = TicketConfirmForm
+
     context = {
         'data': data_ticket,
         'seat_id': seat_id,
         'namaLengkap': namaLengkap,
         'nik': nik,
         'waktuPembelian': waktuPembelian,
+        'data_reservation': data_reservation,
     }
     
     return render(request, 'ticket/displayInfoTicket.html', context)

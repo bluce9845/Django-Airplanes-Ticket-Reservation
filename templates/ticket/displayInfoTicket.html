@@ -1,21 +1,67 @@
 {% extends "base.html" %}{% load static %} {% block title %}ZcAirlanes{% endblock %} {% block content %}
 <div class="container">
   <div class="wrap">
+    {% comment %}
     <div class="content-container">
       <ul class="container">
-        <li>Name : {{ namaLengkap }}</li>
-        <li>Nik : {{ nik }}</li>
+        <li>Name : {{ data_reservation.namaLengkap }}</li>
+        <li>Nik : {{ data_reservation.nik }}</li>
         <li>Maskapai : {{ data.nameMaskapai }}</li>
         <li>tgl berangkat : {{ data.tgl_takeoff }}</li>
         <li>Class : {{ data.clas }}</li>
-        <li>Seat : {{ seat_id }}</li>
+        <li>Seat : {{ data_reservation.seat.seat_number }}</li>
         <li>Harga tiket : {{ data.hargaTicket }}</li>
-        <li>Waktu Pembelian : {{ waktuPembelian }}</li>
+        <li>Waktu Pembelian : {{ data_reservation.waktuPembelian }}</li>
       </ul>
     </div>
+    {% endcomment %}
 
-    <button class="btn btn-success">Yes</button>
-    <button class="btn btn-danger">Cancel</button>
+    <form action="" method="post">
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <label for="name_user_ticket" class="form-label">Name</label>
+        <input type="text" class="form-control" name="name_user_ticket" id="name_user_ticket" readonly value="{{ data_reservation.namaLengkap }}" />
+      </div>
+
+      <div class="mb-3">
+        <label for="nik_user" class="form-label">Nik</label>
+        <input type="text" class="form-control" name="nik_user" id="nik_user" readonly value="{{ data_reservation.nik }}" />
+      </div>
+
+      <div class="mb-3">
+        <label for="maskapaiName" class="form-label">Maskapai Name</label>
+        <input type="text" class="form-control" name="maskapaiName" id="maskapaiName" readonly value="{{ data.nameMaskapai }}" />
+      </div>
+
+      <div class="mb-3">
+        <label for="takeoff_date" class="form-label">Take Off Date</label>
+        <input type="text" class="form-control" name="takeoff_date" id="takeoff_date" readonly value="{{ data.tgl_takeoff }}" />
+      </div>
+
+      <div class="mb-3">
+        <label for="class_airplane" class="form-label">Class</label>
+        <input type="text" class="form-control" name="class_airplane" id="class_airplane" readonly value="{{ data.clas }}" />
+      </div>
+
+      <div class="mb-3">
+        <label for="seat_user" class="form-label">Seat</label>
+        <input type="text" class="form-control" name="seat_user" id="seat_user" readonly value="{{ data_reservation.seat.seat_number }}" />
+      </div>
+
+      <div class="mb-3">
+        <label for="ticketPrice" class="form-label">Ticket Price</label>
+        <input type="text" class="form-control" name="ticketPrice" id="ticketPrice" readonly value="{{ data.hargaTicket }}" />
+      </div>
+
+      <div class="mb-3">
+        <label for="timeBuyTicket" class="form-label">Time Buy Ticket</label>
+        <input type="text" class="form-control" name="timeBuyTicket" id="timeBuyTicket" readonly value="{{ data_reservation.waktuPembelian }}" />
+      </div>
+
+      <button type="submit" class="btn btn-success">Yes</button>
+      <button type="reset" class="btn btn-danger">Cancel</button>
+    </form>
   </div>
 </div>
 {% endblock %}
